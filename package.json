@@ -1,0 +1,41 @@
+{
+  "name": "2fa-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "mobx-react-lite": "^3.3.0",
+    "react": "^17.0.2",
+    "react-declarative": "^1.8.5",
+    "react-dom": "^17.0.2",
+    "react-scripts": "5.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.0",
+    "typescript": "^4.6.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "serve": "http-server ./build",
+    "build": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
