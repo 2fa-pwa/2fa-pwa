@@ -1,10 +1,10 @@
 import { makeAutoObservable } from 'mobx';
-
 import randomString from '../../../utils/randomString';
 
 interface IAlert {
     key: string;
     message: string;
+    
 }
 
 export class AlertService {
@@ -25,13 +25,15 @@ export class AlertService {
             this.alerts.shift();
         }
     };
-
+    
     notify = (message: string) => {
         this.hideCurrent();
         this.alerts.push({
             key: randomString(),
             message,
+            
         });
+        
     };
 
 };

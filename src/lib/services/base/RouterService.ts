@@ -1,8 +1,6 @@
+import { Action, Blocker, BrowserHistory, Listener, Location, To, createMemoryHistory } from "history";
+
 import { makeAutoObservable } from "mobx";
-
-import { Action, Blocker, Listener, To, Location, BrowserHistory } from "history";
-
-import { createMemoryHistory } from "history";
 
 const browserHistory = createMemoryHistory() as BrowserHistory;
 

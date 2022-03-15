@@ -1,8 +1,6 @@
-import { observer } from 'mobx-react-lite';
-
 import Snackbar from "@mui/material/Snackbar";
-
 import ioc from '../../lib/ioc';
+import { observer } from 'mobx-react-lite';
 
 const AUTO_HIDE_DURATION = 5000;
 
