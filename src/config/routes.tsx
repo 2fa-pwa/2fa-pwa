@@ -9,11 +9,11 @@ export const routes: ISwitchItem[] = [
     },
     {
         path: '/home',
-        component: () => <AccountsPage />,
+        element: () => <AccountsPage />,
     },
     {
         path: '/scanner',
-        component: () => <ScannerPage />,
+        element: () => <ScannerPage />,
     },
 ];
 
