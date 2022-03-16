@@ -10,10 +10,13 @@ export class VideoService {
         makeAutoObservable(this);
     };
 
-    initCapture = async () => {
+    initCapture = async (height: number, width: number) => {
         try {
             const currentStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
+                video: {
+                    width: {min: 0, max: width}, 
+                    height: {min: 0, max: height},
+                },
                 audio: false,
             });
             runInAction(() => {

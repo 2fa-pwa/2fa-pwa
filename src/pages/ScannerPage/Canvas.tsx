@@ -16,9 +16,8 @@ export const Canvas = ({
         } else {
             return () => null;
         }
-    }, [width, height]); 
+    }, [width, height, ioc.scannerPageService.isReversed]); 
         
-
     return (
         <canvas
             height={height}
