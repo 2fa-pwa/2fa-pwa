@@ -16,15 +16,18 @@ export const ScannerPage = () => {
     }, []);
 
     return (
-        <Box sx={{ height: 'calc(100vw - 400px)' }}>
+        <>
             {ioc.videoService.state === "resolved" && (
-                <AutoSizer>
+                <AutoSizer
+                    widthRequest={() => window.innerWidth - 20}
+                    heightRequest={() => window.innerHeight - 100}
+                >
                     {({ width, height }) => (
                         <Canvas height={height} width={width} />
                     )}
                 </AutoSizer>
             )}
-        </Box>
+        </>
     );
 };
 
