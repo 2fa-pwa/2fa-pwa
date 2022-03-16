@@ -9,8 +9,10 @@ import { useEffect } from 'react';
 export const ScannerPage = () => {
 
     useEffect(() => {
-        ioc.permissionService.notify()
         ioc.videoService.initCapture( window.innerHeight - 100, window.innerWidth - 20)
+        return () => {
+            ioc.videoService.disposeCapture();
+        };
     }, []);
 
     return (

@@ -27,6 +27,14 @@ export class VideoService {
             runInAction(() => this.state = "rejected")
         }
     };
+
+    disposeCapture = () => {
+        if (this.mediaStream) {
+            this.mediaStream.getTracks().forEach((track) => track.stop())
+            this.mediaStream = null;
+        }
+        this.state = "pending";
+    }
 }
 
 export default VideoService;

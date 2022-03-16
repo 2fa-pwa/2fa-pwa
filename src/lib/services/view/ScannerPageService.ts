@@ -1,5 +1,4 @@
 import AlertService from '../base/AlertService';
-import PermissionService from '../base/PermissionService';
 import RouterService from '../base/RouterService';
 import TYPES from '../../types';
 import VideoService from '../base/VideoService';
@@ -10,7 +9,6 @@ export class ScannerPageService {
 
     alertService = inject<AlertService>(TYPES.alertService);
     routerService = inject<RouterService>(TYPES.routerService);
-    permissoinService = inject<PermissionService>(TYPES.permissionService)
     videoService = inject<VideoService>(TYPES.videoService);
 
     isReversed = false;
@@ -26,20 +24,10 @@ export class ScannerPageService {
         this.routerService.push('/');
     };
 
-    getPermission = () => {
-        this.permissoinService.notify()
-    };
-    
     beginDraw = (canvas: HTMLCanvasElement) => {
         const { mediaStream } = this.videoService;
         const { height, width } = canvas;
         const context = canvas.getContext('2d');
-        
-        if(mediaStream) {
-            const track = mediaStream.getVideoTracks()[0];  
-            let captureImage = new ImageCapture(track);
-        }
-        
 
         if (mediaStream && context) {
 
@@ -50,7 +38,10 @@ export class ScannerPageService {
 
             let drawLoop: number | null = null;
 
-            if (this.isReversed && !canvas.classList.contains('reversed')) {      //отзеркаливание при смене стэйта isReversed
+            /**
+             * отзеркаливание при смене стэйта isReversed
+             */
+            if (this.isReversed && !canvas.classList.contains('reversed')) {
                 context.translate(width, 0);
                 context.scale(-1, 1);
                 canvas.classList.add('reversed')

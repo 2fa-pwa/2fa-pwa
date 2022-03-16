@@ -26,18 +26,13 @@ export const PermissionProvider = ({
 }: IPermissionProviderProps) => {
     return (
         <>
-            {ioc.permissionService.state === 'error' ? (
-                <Modal
-                    open={ioc.permissionService.state === 'error'}
-                    onClose={ioc.permissionService.close}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
+            {ioc.videoService.state === 'rejected' ? (
+                <Modal open>
                     <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                        <Typography variant="h6" component="h2">
                             Permission denied!
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <Typography sx={{ mt: 2 }}>
                             Allow camera usage!
                         </Typography>
                     </Box>
