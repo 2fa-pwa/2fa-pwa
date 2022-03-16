@@ -1,13 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import randomString from '../../../utils/randomString';
-
-interface IPermission {
-    key: string;
-    // message: string;
-    open: boolean;
-}
-
 export class PermissionService {
 
     state = "pending"
@@ -31,6 +23,7 @@ export class PermissionService {
             });
         }       
     };
+    
     close = () => {
         runInAction(() => {
             this.state = "denied"

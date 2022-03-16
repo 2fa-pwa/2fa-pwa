@@ -33,14 +33,14 @@ export const PermissionProvider = ({
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
-                        <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Permission denied!
-                            </Typography>
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                do smth
-                            </Typography>
-                        </Box>
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Permission denied!
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Allow camera usage!
+                        </Typography>
+                    </Box>
                 </Modal>
             ): null}
             {children}

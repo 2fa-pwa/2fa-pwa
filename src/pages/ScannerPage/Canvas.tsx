@@ -1,42 +1,32 @@
 import { useEffect, useRef } from 'react';
 
-// const imageCapture;
-// const onTakePhotoButtonClick = () => {
-//     imageCapture.takePhoto()
-//     .then(blob => createImageBitmap(blob))
-//     .then(imageBitmap => {
-//       const canvas = document.querySelector('#takePhotoCanvas');
-//       drawCanvas(canvas, imageBitmap);
-//     })
-//     .catch(error => console.log(error));
-//   }
+import ioc from '../../lib/ioc';
+import { observer } from 'mobx-react-lite';
 
 export const Canvas = ({
     height = 100,
     width = 100,
 }) => {
-    const rootRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     
     useEffect(() => {
-        const rootElement = rootRef.current!;
-        if (rootElement.childNodes.length) {
-            rootElement.removeChild(rootElement.lastChild!);
+        const { current: canvas } = canvasRef;
+        if (canvas) {
+            return ioc.scannerPageService.beginDraw(canvas);
+        } else {
+            return () => null;
         }
-        const canvasElement = document.createElement('canvas');
-        canvasElement.height = height;
-        canvasElement.width = width;
-        rootElement.appendChild(canvasElement)       
-        // const ctx = canvasElement.getContext('2d');
+    }, [width, height]); 
         
-    }, [height, width]); 
-    
-    
-    
 
     return (
-        <div ref={rootRef} style={{border: '1px solid grey'}}></div>         
-    )
+        <canvas
+            height={height}
+            width={width}
+            ref={canvasRef}
+        />
+    );
 }
 
-  export default Canvas;
+  export default observer(Canvas);
 
