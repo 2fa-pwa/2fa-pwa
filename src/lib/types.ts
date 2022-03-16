@@ -3,7 +3,7 @@ export const TYPES = {
     routerService: Symbol.for('routerService'),
     scannerPageService: Symbol.for('scannerPageService'),
     videoService: Symbol.for('videoService'),
-    
+    capturerService: Symbol.for('capturerService'),
 };
 
 export default TYPES;

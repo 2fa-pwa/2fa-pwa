@@ -1,6 +1,7 @@
 import "./config";
 
 import AlertService from './services/base/AlertService';
+import CapturerService from "./services/base/CapturerService";
 import RouterService from './services/base/RouterService';
 import ScannerPageService from './services/view/ScannerPageService';
 import TYPES from './types';
@@ -12,6 +13,7 @@ export const ioc = {
     routerService: inject<RouterService>(TYPES.routerService),
     scannerPageService: inject<ScannerPageService>(TYPES.scannerPageService),
     videoService: inject<VideoService>(TYPES.videoService),
+    capturerService: inject<CapturerService>(TYPES.capturerService),
 };
 
 (window as any).ioc = ioc;

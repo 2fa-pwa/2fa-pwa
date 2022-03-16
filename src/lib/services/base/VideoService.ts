@@ -32,8 +32,8 @@ export class VideoService {
         if (this.mediaStream) {
             this.mediaStream.getTracks().forEach((track) => track.stop())
             this.mediaStream = null;
+            this.state = "pending";
         }
-        this.state = "pending";
     }
 }
 
