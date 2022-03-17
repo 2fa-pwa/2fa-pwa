@@ -14,6 +14,7 @@ export class VideoService {
         try {
             const currentStream = await navigator.mediaDevices.getUserMedia({
                 video: {
+                    facingMode: 'environment',
                     width: {min: 0, max: width}, 
                     height: {min: 0, max: height},
                 },

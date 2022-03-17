@@ -1,6 +1,7 @@
 import { ActionType, IListAction, ListTyped } from "react-declarative";
 
 import { observer } from "mobx-react-lite";
+import ListPage from "../ListPage";
 
 const actions: IListAction[] = [
     {
@@ -20,7 +21,7 @@ const actions: IListAction[] = [
 export const AccountsPage = () => {
     return (
         <>
-            <p>Список аккаунтов, кнопка добавления аккаунта</p>
+          <ListPage/>
             
         </>
     );

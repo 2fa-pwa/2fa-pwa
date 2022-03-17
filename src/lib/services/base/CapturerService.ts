@@ -1,8 +1,12 @@
+import {} from "node-2fa";
+
+import QrScanner from 'qr-scanner';
 import RouterService from "./RouterService";
 import TYPES from "../../types";
 import VideoService from "./VideoService";
 import { autorun } from 'mobx';
 import { inject } from "react-declarative";
+import { useState } from "react";
 
 const BLOB_INTERVAL = 1_000;
 
@@ -11,22 +15,24 @@ export class CapturerService {
     videoService = inject<VideoService>(TYPES.videoService);
     routerService = inject<RouterService>(TYPES.routerService);
 
-
+    urlState = '';
+    secret: string | null = '';
+    issuer: string | null = '';
+    interval: NodeJS.Timeout | null = null;
     
     constructor() {
-        let interval: NodeJS.Timeout;
         autorun(() => {
             const state = this.videoService.state;
             const pathname = this.routerService.location?.pathname;
             if (state === 'resolved' && pathname === '/scanner') {
-                interval = setInterval(() => this.processBlob(), BLOB_INTERVAL);
+                this.interval = setInterval(() => this.processBlob(), BLOB_INTERVAL);
             }
         }); 
         autorun(() => {
             const state = this.videoService.state;
             const pathname = this.routerService.location?.pathname;
             if (state !== 'resolved' || pathname !== '/scanner') {
-                clearInterval(interval);
+                this.interval && clearInterval(this.interval);
             }
         }); 
     };
@@ -55,11 +61,19 @@ export class CapturerService {
                   frame.close();
                 }, 'image/jpeg');
             }
-            const twofactor = import("node-2fa");
-            // const newSecret = twofactor.generateSecret({ name: "My Awesome App", account: "johndoe" });
-            // const newToken = twofactor.generateToken("XDQXYCP5AC6FA32FQXDGJSPBIDYNKK5W");
-            // twofactor.verifyToken("XDQXYCP5AC6FA32FQXDGJSPBIDYNKK5W", "630618");
+            
+            QrScanner.scanImage(frame)
+            .then(result => this.urlState = result)
+            .catch(error => console.log(error || 'No QR code found.'));
+            if(this.urlState !== null && this.urlState !== '') {
+                const url = new URL(this.urlState) 
+                this.secret = url.searchParams.get("secret")
+                this.issuer = url.searchParams.get("issuer")
+            }            
+            console.log(this.secret)
+            console.log(this.issuer)
         }
+                
     };
     
 };
