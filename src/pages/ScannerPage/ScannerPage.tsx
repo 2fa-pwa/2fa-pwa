@@ -2,6 +2,7 @@ import { AutoSizer } from 'react-declarative';
 import CameraFrontIcon from '@mui/icons-material/CameraFront';
 import Canvas from './Canvas';
 import Fab from '@mui/material/Fab';
+import ListPage from '../ListPage';
 import ioc from "../../lib/ioc";
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
@@ -17,6 +18,7 @@ export const ScannerPage = () => {
 
     return (
         <>
+            <ListPage/>
             {ioc.videoService.state === "resolved" && (
                 <AutoSizer
                     widthRequest={() => window.innerWidth - 20}
@@ -40,6 +42,7 @@ export const ScannerPage = () => {
             >
                 <CameraFrontIcon />
             </Fab>
+           
         </>
     );
 };
