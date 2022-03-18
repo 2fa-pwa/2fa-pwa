@@ -1,3 +1,4 @@
+import AlertService from "./AlertService";
 import { CC_CAPTURE_INTERVAL } from "../../../config/config";
 import ListService from "./ListService";
 import QrScanner from 'qr-scanner';
@@ -12,6 +13,7 @@ export class CapturerService {
     videoService = inject<VideoService>(TYPES.videoService);
     routerService = inject<RouterService>(TYPES.routerService);
     listService = inject<ListService>(TYPES.listService);
+    alertService = inject<AlertService>(TYPES.alertService);
 
     interval: NodeJS.Timeout | null = null;
     
@@ -53,12 +55,13 @@ export class CapturerService {
                 this.interval && clearTimeout(this.interval);
                 this.listService.addAuthItem(secret, issuer);
                 this.routerService.push('/home');
+                this.alertService.notify(`${issuer} added!`);
             } catch (e) {
                 console.log('no image found', e)
             }        
             
         }
-                
+       
     };
     
 };

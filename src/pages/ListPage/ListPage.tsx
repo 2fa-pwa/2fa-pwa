@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import ListItem from './components/ListItem';
 import { ListSubheader } from '@mui/material';
 import ioc from '../../lib/ioc';
 import { observer } from "mobx-react-lite";
@@ -21,10 +20,8 @@ export const ListPage = () => {
               QR list
             </ListSubheader>
           }>
-          {authList.map(({ issuer, secret }, idx) => (
-            <ListItem key={idx}>
-              <ListItemText primary={issuer} secondary={secret} />
-            </ListItem>
+          {authList.map((item, idx) => (
+            <ListItem key={idx} authItem={item} />
           ))}
         </List>
       </nav>
