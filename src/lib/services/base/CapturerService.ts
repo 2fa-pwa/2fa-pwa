@@ -1,5 +1,4 @@
-import {} from "node-2fa";
-
+import { CC_CAPTURE_INTERVAL } from "../../../config/config";
 import ListService from "./ListService";
 import QrScanner from 'qr-scanner';
 import RouterService from "./RouterService";
@@ -7,8 +6,6 @@ import TYPES from "../../types";
 import VideoService from "./VideoService";
 import { autorun } from 'mobx';
 import { inject } from "react-declarative";
-
-const BLOB_INTERVAL = 3_000;
 
 export class CapturerService {
 
@@ -25,7 +22,7 @@ export class CapturerService {
             if (state === 'resolved' && pathname === '/scanner') {
                 const handler = async () => {
                     await this.processBlob()
-                    this.interval = setTimeout(handler, BLOB_INTERVAL);
+                    this.interval = setTimeout(handler, CC_CAPTURE_INTERVAL);
                 };
                 handler();
             }
@@ -40,7 +37,7 @@ export class CapturerService {
     };
 
     processBlob = async () => {
-        console.log('кадр')
+        console.log('capture')
         const { mediaStream } = this.videoService;
         
         if(mediaStream) {
@@ -55,7 +52,7 @@ export class CapturerService {
                 const issuer = url.searchParams.get("issuer")!;
                 this.interval && clearTimeout(this.interval);
                 this.listService.addAuthItem(secret, issuer);
-                this.listService.generateToken(secret)
+                this.routerService.push('/home');
             } catch (e) {
                 console.log('no image found', e)
             }        
@@ -67,4 +64,8 @@ export class CapturerService {
 };
 
 export default CapturerService;
+
+function BLOB_INTERVAL(handler: () => Promise<void>, BLOB_INTERVAL: any): NodeJS.Timeout | null {
+    throw new Error("Function not implemented.");
+}
    

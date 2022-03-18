@@ -9,7 +9,12 @@ interface IAuthtoken {
 
 export class ListService {
 
-    authMap = new Map<string, IAuthtoken>()
+    authMap = new Map<string, IAuthtoken>([
+        ["123", {
+            issuer: 'Mock',
+            secret: 'ITRRF5A3O3CY4EMF3PY7ZTJ4O4'
+        }]
+    ])
 
     constructor() {
         makeAutoObservable(this);
