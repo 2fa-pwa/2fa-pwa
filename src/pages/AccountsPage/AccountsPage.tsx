@@ -21,7 +21,7 @@ const actions: IListAction[] = [
 export const AccountsPage = () => {
     return (
         <>
-          {/* <ListPage/> */}
+          <ListPage/>
         </>
     );
 };

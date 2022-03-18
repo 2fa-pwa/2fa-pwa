@@ -1,6 +1,3 @@
-import CapturerService from './CapturerService';
-import TYPES from '../../types';
-import { inject } from 'react-declarative';
 import { makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 

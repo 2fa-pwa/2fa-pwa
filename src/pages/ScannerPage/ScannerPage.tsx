@@ -18,7 +18,6 @@ export const ScannerPage = () => {
 
     return (
         <>
-            <ListPage/>
             {ioc.videoService.state === "resolved" && (
                 <AutoSizer
                     widthRequest={() => window.innerWidth - 20}
