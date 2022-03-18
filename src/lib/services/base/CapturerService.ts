@@ -48,9 +48,6 @@ export class CapturerService {
             const capturer = new ImageCapture(track);
             const frame: ImageBitmap = await capturer.grabFrame();
             
-            console.log('capturer ')
-            console.log(frame);
-            
             try { 
                 const result = await QrScanner.scanImage(frame);
                 const url = new URL(result) 
@@ -58,8 +55,9 @@ export class CapturerService {
                 const issuer = url.searchParams.get("issuer")!;
                 this.interval && clearTimeout(this.interval);
                 this.listService.addAuthItem(secret, issuer);
-            } catch {
-                console.log('no image found')
+                this.listService.generateToken(secret)
+            } catch (e) {
+                console.log('no image found', e)
             }        
             
         }

@@ -1,3 +1,4 @@
+import { generateToken } from 'node-2fa';
 import { makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
@@ -28,6 +29,11 @@ export class ListService {
             }
         )
     };
+
+    generateToken = (secret: string) => {
+        const { token } = generateToken(secret) || {};
+        console.log({token});
+    }
 
 }
 

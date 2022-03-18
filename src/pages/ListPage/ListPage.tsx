@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite";
 export const ListPage = () => {
 
   const { authList } = ioc.listService;
+ 
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <nav aria-label="main mailbox folders">
