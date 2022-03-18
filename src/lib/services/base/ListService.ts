@@ -8,9 +8,9 @@ interface IAuthtoken {
     secret: string | null,
     issuer: string | null
 }
+
 export class ListService {
-    
-    capturerService = inject<CapturerService>(TYPES.capturerService);
+
     authMap = new Map<string, IAuthtoken>()
 
     constructor() {
@@ -22,7 +22,7 @@ export class ListService {
     };
     
     
-    addAuthItem = (secret: string | null, issuer: string | null) => {
+    addAuthItem = (secret: string, issuer: string) => {
         this.authMap.set(
             uuid(), 
             {
