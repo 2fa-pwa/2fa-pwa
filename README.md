@@ -1,6 +1,6 @@
 # 2fa-pwa
 
-> PWA for scanning two factor auth qr codes. Scanned codes can be downloaded and uploaded to this app
+> PWA for scanning two factor auth qr codes. Scanned codes can be downloaded from and uploaded to this app
 
 ## GitHub pages deploy
 
