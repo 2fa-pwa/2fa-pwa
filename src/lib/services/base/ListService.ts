@@ -22,7 +22,7 @@ export class ListService {
     };
     
     get authList() {
-        return [...this.authMap.values()];
+        return [...this.authMap.entries()];
     };
  
     addAuthItem = (secret: string, issuer: string) => {
@@ -42,6 +42,18 @@ export class ListService {
     generateToken = (secret: string) => {
         const { token } = generateToken(secret) || {};
         return token!;
+    };
+
+    removeAuthItem = (id: string) => {
+        //
+    };
+
+    exportItemList = () => {
+        //
+    };
+
+    importItemList = () => {
+        //
     };
 
 };

@@ -10,6 +10,7 @@ import { useConfirm } from 'react-declarative';
 
 interface IListItemProps {
     authItem: IAuthToken;
+    authId: string;
 }
 
 export interface IToken {
@@ -20,6 +21,7 @@ export interface IToken {
 
 export const ListItem = ({
     authItem,
+    authId,
 }: IListItemProps) => {    
 
     const pickConfirm = useConfirm();
@@ -44,7 +46,7 @@ export const ListItem = ({
         msg: `Are you sure to remove "${authItem.issuer}"?`
     }).then((confirmed) => {
         if (confirmed) {
-            console.log('here');
+            console.log('here', authId);
         }
     });
     

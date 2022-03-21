@@ -30,8 +30,8 @@ export const ListPage = () => {
           }
         }}
       >
-        {authList.map((item, idx) => (
-          <ListItem key={idx} authItem={item} />
+        {authList.map(([id, item], idx) => (
+          <ListItem key={idx} authItem={item} authId={id} />
         ))}
         {authList.length === 0 && (
           <MatListItem>
