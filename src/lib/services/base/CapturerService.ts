@@ -53,7 +53,7 @@ export class CapturerService {
                 const secret = url.searchParams.get("secret")!;
                 const issuer = url.searchParams.get("issuer")!;
                 this.interval && clearTimeout(this.interval);
-                this.listService.addAuthItem(secret, issuer);
+                this.listService.addAuthItem(secret, issuer ? issuer : prompt('Type token issuer') || 'Unknown issuer');
                 this.routerService.push('/home');
                 this.alertService.notify(`${issuer} added!`);
             } catch (e) {

@@ -1,37 +1,48 @@
 import { useEffect, useState } from 'react';
 
+import { Box } from '@mui/material';
 import { CC_TOKEN_LIFETIME } from '../../../config/config';
 import IAuthToken from '../../../model/IAuthToken';
 import MatListItem from '@mui/material/ListItem';
 import MatListItemText from '@mui/material/ListItemText';
-import { generateToken } from 'node-2fa';
 import ioc from '../../../lib/ioc';
 
 interface IListItemProps {
     authItem: IAuthToken;
 }
 
+export interface IToken {
+    token: string
+    date: Date
+    durationTokenMs: number
+}
+
 export const ListItem = ({
     authItem,
 }: IListItemProps) => {    
-
-    const token = ioc.listService.generateToken(authItem.secret)
-
-    // const handler = async (token: string | undefined) => {
-    //     await ioc.listService.generateToken(authItem.secret)
-    //     console.log('heheheh')
-    //     const interval = setTimeout(handler, 3000)
-    // }
     
-    const [timeLeft, setTimeLeft] = useState(30);
+    const [countdown, setCountdown] = useState(CC_TOKEN_LIFETIME);
+    const [token, setToken] = useState(ioc.listService.generateToken(authItem.secret));
 
     useEffect(() => {
-        timeLeft > 0 && setTimeLeft(() => setTimeLeft(timeLeft - 1), 1000);
-      }, [timeLeft]);
+        const timeout = setTimeout(() => {
+            let currentCountdown = countdown - 1;
+            if (currentCountdown === 0) {
+                currentCountdown = CC_TOKEN_LIFETIME;
+                setToken(ioc.listService.generateToken(authItem.secret))
+            }
+            setCountdown(currentCountdown)
+        }, 1_000);
+        return () => clearTimeout(timeout);
+    }, [countdown]);
+   
     
     return  (
         <MatListItem>
             <MatListItemText primary={authItem.issuer} secondary={token} />
+            <Box>
+                {countdown}
+            </Box>
         </MatListItem>
     );
 }

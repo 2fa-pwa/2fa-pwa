@@ -12,7 +12,11 @@ export const App = () => {
 
   return (
     <Scaffold onOptionClick={handleMenuClick} title="InfoLink CRM" options={options}>
-      <Grid container>
+      <Grid container sx={{
+        '& > *': {
+          flex: 1,
+        },
+      }}>
         <Switch
           Loading={() => <p>Checking permissions (mock)</p>}
           NotFound={() => <p>Not found(</p>}
