@@ -61,9 +61,28 @@ export class ListService {
     };
 
     imporItemList = () => {
-        
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = async ({target}: any) => {
+            try {
+                const file = target.files[0];
+                const name = file.name;
+                const extension = name.split('.').pop().toLowerCase();
+                // if (extension === 'js') {
+                //     const reader = new FileReader();
+                //     reader.onload = () => resolve(reader.result);
+                //     reader.readAsText(file);
+                // } else {
+                //     alert('Invalid extension .' + extension);
+                // }   
+            } catch {
+                console.log('error')
+            }
+          
+        };
+        input.click();
     };
-
+   
 };
 
 export default ListService;
