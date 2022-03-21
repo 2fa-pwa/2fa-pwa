@@ -23,20 +23,20 @@ export class ListService {
     alertService = inject<AlertService>(TYPES.alertService);
 
     isSaved = true;
-    
+
     constructor() {
-        makeAutoObservable(this);       
+        makeAutoObservable(this);
     };
-    
+
     get authList() {
         return [...this.authMap.entries()];
     };
- 
+
     setIsSaved = (isSaved: boolean) => this.isSaved = isSaved;
 
     addAuthItem = (secret: string, issuer: string) => {
         this.authMap.set(
-            uuid(), 
+            uuid(),
             {
                 secret,
                 issuer,
@@ -108,7 +108,7 @@ export class ListService {
     imporItemList = () => {
         const input = document.createElement('input');
         input.type = 'file';
-        input.onchange = async ({target}: any) => {
+        input.onchange = async ({ target }: any) => {
             try {
                 const file = target.files[0];
                 const name = file.name;
@@ -121,18 +121,20 @@ export class ListService {
                         this.readItemListFromPlainArray(itemList);
                     };
                     reader.readAsText(file);
-                 } else {
+                } else {
                     this.alertService.notify('Invalid extension .' + extension);
-                 }   
+                }
+                document.body.removeChild(input);
             } catch (e) {
                 console.error(e);
                 this.alertService.notify('Sorry, something goes wrong');
             }
-          
+
         };
+        document.body.appendChild(input);
         input.click();
     };
-   
+
 };
 
 export default ListService;
