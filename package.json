@@ -38,6 +38,7 @@
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "mini-css-extract-plugin": "^2.4.5",
+    "mobx": "^6.5.0",
     "mobx-react-lite": "^3.3.0",
     "node-2fa": "^2.0.3",
     "postcss": "^8.4.4",
