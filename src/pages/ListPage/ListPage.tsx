@@ -13,11 +13,11 @@ import { observer } from "mobx-react-lite";
 
 const actions: IOption[] = [
   {
-    action: 'export-action',
+    action: 'expot action',
     label: 'Export tokens'
   },
   {
-    action: 'import-action',
+    action: 'import action',
     label: 'Import tokens'
   }
 ];
@@ -29,9 +29,11 @@ export const ListPage = () => {
   return (
     <Box>
       <Breadcrumbs
-        disabled
+        
         actions={actions}
+        onAction={ioc.listService.exportItemList}
       />
+      
       <Paper sx={{
         height: 'calc(100vh - 145px)',
 

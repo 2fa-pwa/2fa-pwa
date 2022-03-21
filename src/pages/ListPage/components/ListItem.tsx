@@ -13,12 +13,6 @@ interface IListItemProps {
     authId: string;
 }
 
-export interface IToken {
-    token: string
-    date: Date
-    durationTokenMs: number
-}
-
 export const ListItem = ({
     authItem,
     authId,
@@ -43,10 +37,11 @@ export const ListItem = ({
    
     const handleClick = () => pickConfirm({
         title: 'Confirmation',
-        msg: `Are you sure to remove "${authItem.issuer}"?`
+        msg: `Are you sure you watnt to remove "${authItem.issuer}"?`
     }).then((confirmed) => {
         if (confirmed) {
-            console.log('here', authId);
+            ioc.listService.removeAuthItem(authId)
+  
         }
     });
     

@@ -5,11 +5,12 @@ import { makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
 const storageManager = new class {
+    getContent = () => localStorage.getItem(CC_LOCALSTORAGE_KEY) || '[]';
     getData = (): IAuthToken[] => {
-        return JSON.parse(localStorage.getItem(CC_LOCALSTORAGE_KEY) || '[]') as IAuthToken[];
+        return JSON.parse(this.getContent()) as IAuthToken[];
     };
     setData = (data: IAuthToken[]) => {
-        localStorage.setItem(CC_LOCALSTORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(CC_LOCALSTORAGE_KEY, JSON.stringify(data, null, 2));
     };
 };
 
@@ -45,15 +46,22 @@ export class ListService {
     };
 
     removeAuthItem = (id: string) => {
-        //
+        this.authMap.delete(id)
     };
 
-    exportItemList = () => {
-        //
+    exportItemList = (fileName = '2fa-pwa.json') => {
+        const blob = new Blob([storageManager.getContent()], { type: 'application/json;charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        [a.href, a.download] = [url, fileName];
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => document.body.removeChild(a));
+        window.URL.revokeObjectURL(url);
     };
 
-    importItemList = () => {
-        //
+    imporItemList = () => {
+        
     };
 
 };
