@@ -1,6 +1,9 @@
+import AlertService from './AlertService';
 import { CC_LOCALSTORAGE_KEY } from '../../../config/config';
 import IAuthToken from '../../../model/IAuthToken';
+import TYPES from '../../types';
 import { generateToken } from 'node-2fa';
+import { inject } from 'react-declarative';
 import { makeAutoObservable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
@@ -17,6 +20,9 @@ const storageManager = new class {
 export class ListService {
 
     authMap = new Map<string, IAuthToken>(storageManager.getData().map((item) => [uuid(), item]))
+    alertService = inject<AlertService>(TYPES.alertService);
+
+    isSaved = true;
     
     constructor() {
         makeAutoObservable(this);       
@@ -26,6 +32,8 @@ export class ListService {
         return [...this.authMap.entries()];
     };
  
+    setIsSaved = (isSaved: boolean) => this.isSaved = isSaved;
+
     addAuthItem = (secret: string, issuer: string) => {
         this.authMap.set(
             uuid(), 
@@ -38,6 +46,7 @@ export class ListService {
             ...storageManager.getData(),
             { secret, issuer },
         ]);
+        this.setIsSaved(false);
     };
 
     generateToken = (secret: string) => {
@@ -46,7 +55,37 @@ export class ListService {
     };
 
     removeAuthItem = (id: string) => {
-        this.authMap.delete(id)
+        this.authMap.delete(id);
+        storageManager.setData(this.authList.map(([_, item]) => item));
+        this.setIsSaved(false);
+    };
+
+    readItemListFromPlainArray = (data: any[]) => {
+        try {
+            if (Array.isArray(data) && data.length) {
+                const temp: IAuthToken[] = [];
+                for (const item of data) {
+                    const { secret, issuer } = item || {};
+                    if (secret && issuer) {
+                        temp.push({ secret, issuer });
+                    } else {
+                        throw new Error('invalid object');
+                    }
+                }
+                storageManager.setData(temp);
+                this.authMap.clear();
+                for (const item of temp) {
+                    this.authMap.set(uuid(), item);
+                }
+                this.alertService.notify('Import complete');
+                storageManager.setData(temp);
+                this.setIsSaved(true);
+            } else {
+                throw new Error('item list is not array')
+            }
+        } catch (e) {
+            this.alertService.notify('Invalid json object');
+        }
     };
 
     exportItemList = (fileName = '2fa-pwa.json') => {
@@ -55,8 +94,14 @@ export class ListService {
         const a = document.createElement('a');
         [a.href, a.download] = [url, fileName];
         document.body.appendChild(a);
+        a.addEventListener('click', () => {
+            setTimeout(() => document.body.removeChild(a));
+            this.alertService.notify('Export complete');
+            this.setIsSaved(true);
+        }, {
+            once: true,
+        });
         a.click();
-        setTimeout(() => document.body.removeChild(a));
         window.URL.revokeObjectURL(url);
     };
 
@@ -68,15 +113,20 @@ export class ListService {
                 const file = target.files[0];
                 const name = file.name;
                 const extension = name.split('.').pop().toLowerCase();
-                // if (extension === 'js') {
-                //     const reader = new FileReader();
-                //     reader.onload = () => resolve(reader.result);
-                //     reader.readAsText(file);
-                // } else {
-                //     alert('Invalid extension .' + extension);
-                // }   
-            } catch {
-                console.log('error')
+                if (extension === 'json') {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const { result } = reader;
+                        const itemList = JSON.parse((result || '').toString());
+                        this.readItemListFromPlainArray(itemList);
+                    };
+                    reader.readAsText(file);
+                 } else {
+                    this.alertService.notify('Invalid extension .' + extension);
+                 }   
+            } catch (e) {
+                console.error(e);
+                this.alertService.notify('Sorry, something goes wrong');
             }
           
         };

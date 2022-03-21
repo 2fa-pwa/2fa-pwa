@@ -11,7 +11,7 @@ export const App = () => {
   const handleMenuClick = (path: string) => ioc.routerService.push(path);
 
   return (
-    <Scaffold onOptionClick={handleMenuClick} title="InfoLink CRM" options={options}>
+    <Scaffold onOptionClick={handleMenuClick} title="2FA PWA" options={options}>
       <Grid container sx={{
         '& > *': {
           flex: 1,

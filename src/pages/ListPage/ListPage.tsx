@@ -13,11 +13,15 @@ import { observer } from "mobx-react-lite";
 
 const actions: IOption[] = [
   {
-    action: 'expot action',
+    action: 'scan-action',
+    label: 'Scan QR code'
+  },
+  {
+    action: 'export-action',
     label: 'Export tokens'
   },
   {
-    action: 'import action',
+    action: 'import-action',
     label: 'Import tokens'
   }
 ];
@@ -26,17 +30,26 @@ export const ListPage = () => {
 
   const { authList } = ioc.listService;
 
+  const handleAction = (name: string) => {
+    if (name === 'export-action') {
+      ioc.listService.exportItemList();
+    } else if (name === 'import-action') {
+      ioc.listService.imporItemList();
+    } else if (name === 'scan-action') {
+      ioc.routerService.push('/scanner');
+    }
+  };
+
   return (
     <Box>
       <Breadcrumbs
-        
+        disabled={ioc.listService.isSaved}
         actions={actions}
-        onAction={ioc.listService.exportItemList}
+        onAction={handleAction}
+        onSave={() => ioc.listService.exportItemList()}
       />
-      
       <Paper sx={{
         height: 'calc(100vh - 145px)',
-
       }}>
         <List
           subheader={
