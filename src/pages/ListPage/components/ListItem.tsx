@@ -20,12 +20,12 @@ export const ListItem = ({
 
     const pickConfirm = useConfirm();
     
-    const [countdown, setCountdown] = useState(CC_TOKEN_LIFETIME);
+    const [countdown, setCountdown] = useState(CC_TOKEN_LIFETIME - new Date().getSeconds() % CC_TOKEN_LIFETIME);
     const [token, setToken] = useState(ioc.listService.generateToken(authItem.secret));
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            let currentCountdown = countdown - 1;
+            let currentCountdown = Math.max(countdown - 1, 0);
             if (currentCountdown === 0) {
                 currentCountdown = CC_TOKEN_LIFETIME;
                 setToken(ioc.listService.generateToken(authItem.secret))
