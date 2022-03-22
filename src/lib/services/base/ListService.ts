@@ -1,6 +1,7 @@
 import AlertService from './AlertService';
 import { CC_LOCALSTORAGE_KEY } from '../../../config/config';
 import IAuthToken from '../../../model/IAuthToken';
+import RouterService from './RouterService';
 import TYPES from '../../types';
 import { generateToken } from 'node-2fa';
 import { inject } from 'react-declarative';
@@ -21,7 +22,8 @@ export class ListService {
 
     authMap = new Map<string, IAuthToken>(storageManager.getData().map((item) => [uuid(), item]))
     alertService = inject<AlertService>(TYPES.alertService);
-
+    routerService = inject<RouterService>(TYPES.routerService);
+    
     isSaved = true;
 
     constructor() {
@@ -57,13 +59,26 @@ export class ListService {
     removeAuthItem = (id: string) => {
         this.authMap.delete(id);
         storageManager.setData(this.authList.map(([_, item]) => item));
-        this.setIsSaved(false);
+       
+    };
+    
+    getItem = (id: string) => {
+        return this.authMap.get(id) || null;
     };
 
-    changeAuthItem = (id: string, secret: string, issuer: string) => {
-        storageManager.setData(this.authList.map(([_, item]) => item))
-    }
+    setItem = (id: string, item: IAuthToken) => {
+        this.authMap.set(id, item);
+        storageManager.setData(this.authList.map(([_, item]) => item));
+        this.setIsSaved(false);
+        this.alertService.notify('Item saved');
+        this.routerService.push('/home');
+    };
 
+    generateQR = () => {
+        
+        // 'otpauth://totp/jesse+teammate@rollbar.com?secret=ITRRF5A3O3CY4EMF3PY7ZTJ4O4&issuer=Rollbar'
+    };
+    
     readItemListFromPlainArray = (data: any[]) => {
         try {
             if (Array.isArray(data) && data.length) {
