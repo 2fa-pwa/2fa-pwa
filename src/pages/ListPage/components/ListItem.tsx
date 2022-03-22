@@ -6,7 +6,6 @@ import IAuthToken from '../../../model/IAuthToken';
 import MatListItem from '@mui/material/ListItem';
 import MatListItemText from '@mui/material/ListItemText';
 import ioc from '../../../lib/ioc';
-import { useConfirm } from 'react-declarative';
 
 interface IListItemProps {
     authItem: IAuthToken;
@@ -16,9 +15,7 @@ interface IListItemProps {
 export const ListItem = ({
     authItem,
     authId,
-}: IListItemProps) => {    
-
-    const pickConfirm = useConfirm();
+}: IListItemProps) => {
     
     const [countdown, setCountdown] = useState(CC_TOKEN_LIFETIME - new Date().getSeconds() % CC_TOKEN_LIFETIME);
     const [token, setToken] = useState(ioc.listService.generateToken(authItem.secret));
@@ -34,16 +31,12 @@ export const ListItem = ({
         }, 1_000);
         return () => clearTimeout(timeout);
     }, [countdown]);
-   
-    const handleClick = () => pickConfirm({
-        title: 'Confirmation',
-        msg: `Are you sure you watnt to remove "${authItem.issuer}"?`
-    }).then((confirmed) => {
-        if (confirmed) {
-            ioc.listService.removeAuthItem(authId)
-  
-        }
-    });
+    
+    const handleClick = () => {
+        ioc.routerService.push(`/qr/${authId}`);
+        console.log('authId')
+        console.log(authId)
+    };
     
     return  (
         <MatListItem onClick={handleClick}>

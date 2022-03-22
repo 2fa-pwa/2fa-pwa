@@ -60,6 +60,10 @@ export class ListService {
         this.setIsSaved(false);
     };
 
+    changeAuthItem = (id: string, secret: string, issuer: string) => {
+        storageManager.setData(this.authList.map(([_, item]) => item))
+    }
+
     readItemListFromPlainArray = (data: any[]) => {
         try {
             if (Array.isArray(data) && data.length) {
@@ -77,7 +81,7 @@ export class ListService {
                 for (const item of temp) {
                     this.authMap.set(uuid(), item);
                 }
-                this.alertService.notify('Import complete');
+                this.alertService.notify('Import completed');
                 storageManager.setData(temp);
                 this.setIsSaved(true);
             } else {
@@ -87,7 +91,9 @@ export class ListService {
             this.alertService.notify('Invalid json object');
         }
     };
-
+    /**
+     * Скачиваем с сайта
+     */
     exportItemList = (fileName = '2fa-pwa.json') => {
         const blob = new Blob([storageManager.getContent()], { type: 'application/json;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
@@ -98,7 +104,7 @@ export class ListService {
         document.body.appendChild(a);
         a.addEventListener('click', () => {
             setTimeout(() => document.body.removeChild(a));
-            this.alertService.notify('Export complete');
+            this.alertService.notify('Export completed');
             this.setIsSaved(true);
         }, {
             once: true,
@@ -106,7 +112,9 @@ export class ListService {
         a.click();
         window.URL.revokeObjectURL(url);
     };
-
+    /**
+     * Загружаем на сайт
+     */
     imporItemList = () => {
         const input = document.createElement('input');
         input.style.visibility="hidden";
