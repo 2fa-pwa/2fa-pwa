@@ -93,6 +93,7 @@ export class ListService {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.visibility="hidden";
+        a.target = '_blank';
         [a.href, a.download] = [url, fileName];
         document.body.appendChild(a);
         a.addEventListener('click', () => {
