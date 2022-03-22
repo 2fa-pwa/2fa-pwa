@@ -92,6 +92,7 @@ export class ListService {
         const blob = new Blob([storageManager.getContent()], { type: 'application/json;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
+        a.style.visibility="hidden";
         [a.href, a.download] = [url, fileName];
         document.body.appendChild(a);
         a.addEventListener('click', () => {
@@ -107,6 +108,7 @@ export class ListService {
 
     imporItemList = () => {
         const input = document.createElement('input');
+        input.style.visibility="hidden";
         input.type = 'file';
         input.onchange = async ({ target }: any) => {
             try {

@@ -32,6 +32,7 @@ export class ScannerPageService {
         if (mediaStream && context) {
 
             const video = document.createElement('video');
+            video.setAttribute('playsinline', '');
             video.srcObject = mediaStream;
 
             video.play();
