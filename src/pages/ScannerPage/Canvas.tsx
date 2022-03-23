@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import ioc from '../../lib/ioc';
 import { observer } from 'mobx-react-lite';
@@ -9,7 +9,7 @@ export const Canvas = ({
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     
-    useEffect(() => {
+    useLayoutEffect(() => {
         const { current: canvas } = canvasRef;
         if (canvas) {
             return ioc.scannerPageService.beginDraw(canvas);
