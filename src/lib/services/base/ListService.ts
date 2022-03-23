@@ -62,7 +62,8 @@ export class ListService {
     removeAuthItem = (id: string) => {
         this.authMap.delete(id);
         storageManager.setData(this.authList.map(([_, item]) => item));
-
+        this.alertService.notify('Item deleted');
+        this.routerService.push('/home');
     };
 
     getItem = (id: string) => {

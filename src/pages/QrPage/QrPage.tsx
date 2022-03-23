@@ -28,11 +28,16 @@ interface IQrPageProps {
   id: string;
 }
 
+const actions: IOption[] = [
+  {
+    action: 'action-remove',
+    label: 'Remove item',
+  },
+];
+
 export const QrPage = ({
   id,
-}: {
-  id: string;
-}) => {
+}: IQrPageProps) => {
 
   const [data, setData] = useState<IAuthToken | null>(ioc.listService.getItem(id));
 
@@ -45,10 +50,20 @@ export const QrPage = ({
     setData(newData);
   };
 
+  const handleAction = (name: string) => {
+    if (name === 'action-remove') {
+      ioc.listService.removeAuthItem(id)
+    }
+  };
+
   return (
     <>
       <Stack spacing={2}>
         <Breadcrumbs
+          title='Accounts'
+          subtitle={data?.issuer}
+          actions={actions}
+          onAction={handleAction}
           onSave={handleSave}
         />
         <One
