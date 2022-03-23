@@ -41,7 +41,6 @@ export class CapturerService {
     processBlob = async () => {
         console.log('capture')
         const { mediaStream } = this.videoService;
-        
         if(mediaStream) {
             const track = mediaStream.getVideoTracks()[0];
             const capturer = new ImageCapture(track);

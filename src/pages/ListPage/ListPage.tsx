@@ -62,7 +62,9 @@ export const ListPage = () => {
           sx={{
             '& > .MuiListItem-root:nth-child(2n + 1)': {
               background: '#0001',
-            }
+            },
+            overflowY: 'auto',
+            maxHeight: '100%',
           }}
         >
           {authList.map(([id, item], idx) => (
