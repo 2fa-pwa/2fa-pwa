@@ -23,7 +23,7 @@ export class ListService {
     authMap = new Map<string, IAuthToken>(storageManager.getData().map((item) => [uuid(), item]))
     alertService = inject<AlertService>(TYPES.alertService);
     routerService = inject<RouterService>(TYPES.routerService);
-    
+
     isSaved = true;
 
     constructor() {
@@ -36,19 +36,22 @@ export class ListService {
 
     setIsSaved = (isSaved: boolean) => this.isSaved = isSaved;
 
-    addAuthItem = (secret: string, issuer: string) => {
+    addAuthItem = (secret: string, issuer: string, href: string) => {
         this.authMap.set(
             uuid(),
             {
                 secret,
                 issuer,
+                href,
             }
         );
         storageManager.setData([
             ...storageManager.getData(),
-            { secret, issuer },
+            { secret, issuer, href },
         ]);
         this.setIsSaved(false);
+        console.log('ADDauthitem href')
+        console.log(href)
     };
 
     generateToken = (secret: string) => {
@@ -59,9 +62,9 @@ export class ListService {
     removeAuthItem = (id: string) => {
         this.authMap.delete(id);
         storageManager.setData(this.authList.map(([_, item]) => item));
-       
+
     };
-    
+
     getItem = (id: string) => {
         return this.authMap.get(id) || null;
     };
@@ -75,18 +78,18 @@ export class ListService {
     };
 
     generateQR = () => {
-        
+
         // 'otpauth://totp/jesse+teammate@rollbar.com?secret=ITRRF5A3O3CY4EMF3PY7ZTJ4O4&issuer=Rollbar'
     };
-    
+
     readItemListFromPlainArray = (data: any[]) => {
         try {
             if (Array.isArray(data) && data.length) {
                 const temp: IAuthToken[] = [];
                 for (const item of data) {
-                    const { secret, issuer } = item || {};
-                    if (secret && issuer) {
-                        temp.push({ secret, issuer });
+                    const { secret, issuer, href } = item || {};
+                    if (secret && issuer && href) {
+                        temp.push({ secret, issuer, href });
                     } else {
                         throw new Error('invalid object');
                     }
@@ -113,7 +116,7 @@ export class ListService {
         const blob = new Blob([storageManager.getContent()], { type: 'application/json;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.style.visibility="hidden";
+        a.style.visibility = "hidden";
         a.target = '_blank';
         [a.href, a.download] = [url, fileName];
         document.body.appendChild(a);
@@ -132,7 +135,7 @@ export class ListService {
      */
     imporItemList = () => {
         const input = document.createElement('input');
-        input.style.visibility="hidden";
+        input.style.visibility = "hidden";
         input.type = 'file';
         input.onchange = async ({ target }: any) => {
             try {

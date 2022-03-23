@@ -34,11 +34,6 @@ export const ListItem = ({
     
     const handleClick = () => {
         ioc.routerService.push(`/qr/${authId}`);
-        
-        console.log('authId')
-        console.log(authId)
-        console.log('authitem')
-        console.log(authItem)
     };
     
     return  (

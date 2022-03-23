@@ -46,16 +46,17 @@ export class CapturerService {
             const track = mediaStream.getVideoTracks()[0];
             const capturer = new ImageCapture(track);
             const frame: ImageBitmap = await capturer.grabFrame();
-            
             try { 
                 const result = await QrScanner.scanImage(frame);
-                const url = new URL(result) 
+                const url = new URL(result);
                 const secret = url.searchParams.get("secret")!;
                 const issuer = url.searchParams.get("issuer")!;
-                this.interval && clearTimeout(this.interval);
-                this.listService.addAuthItem(secret, issuer ? issuer : prompt('Type token issuer') || 'Unknown issuer');
-                this.routerService.push('/home');
-                this.alertService.notify(`${issuer} added!`);
+                if (secret) {
+                    this.interval && clearTimeout(this.interval);
+                    this.listService.addAuthItem(secret, issuer ? issuer : prompt('Type token issuer') || 'Unknown issuer', result);
+                    this.routerService.push('/home');
+                    this.alertService.notify(`${issuer} added!`);
+                }
             } catch (e) {
                 console.log('no image found', e)
             }        
@@ -67,8 +68,3 @@ export class CapturerService {
 };
 
 export default CapturerService;
-
-function BLOB_INTERVAL(handler: () => Promise<void>, BLOB_INTERVAL: any): NodeJS.Timeout | null {
-    throw new Error("Function not implemented.");
-}
-   
