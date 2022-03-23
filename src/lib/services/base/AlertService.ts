@@ -33,10 +33,8 @@ export class AlertService {
         this.hideCurrent();
         this.alerts.push({
             key: randomString(),
-            message,
-            
+            message, 
         });
-        
     };
 
 };
