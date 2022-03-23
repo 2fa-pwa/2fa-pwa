@@ -1,6 +1,7 @@
 import AlertService from './AlertService';
 import { CC_LOCALSTORAGE_KEY } from '../../../config/config';
 import IAuthToken from '../../../model/IAuthToken';
+import RouterService from './RouterService';
 import TYPES from '../../types';
 import { generateToken } from 'node-2fa';
 import { inject } from 'react-declarative';
@@ -21,6 +22,7 @@ export class ListService {
 
     authMap = new Map<string, IAuthToken>(storageManager.getData().map((item) => [uuid(), item]))
     alertService = inject<AlertService>(TYPES.alertService);
+    routerService = inject<RouterService>(TYPES.routerService);
 
     isSaved = true;
 
@@ -34,19 +36,22 @@ export class ListService {
 
     setIsSaved = (isSaved: boolean) => this.isSaved = isSaved;
 
-    addAuthItem = (secret: string, issuer: string) => {
+    addAuthItem = (secret: string, issuer: string, href: string) => {
         this.authMap.set(
             uuid(),
             {
                 secret,
                 issuer,
+                href,
             }
         );
         storageManager.setData([
             ...storageManager.getData(),
-            { secret, issuer },
+            { secret, issuer, href },
         ]);
         this.setIsSaved(false);
+        console.log('ADDauthitem href')
+        console.log(href)
     };
 
     generateToken = (secret: string) => {
@@ -57,7 +62,25 @@ export class ListService {
     removeAuthItem = (id: string) => {
         this.authMap.delete(id);
         storageManager.setData(this.authList.map(([_, item]) => item));
+        this.alertService.notify('Item deleted');
+        this.routerService.push('/home');
+    };
+
+    getItem = (id: string) => {
+        return this.authMap.get(id) || null;
+    };
+
+    setItem = (id: string, item: IAuthToken) => {
+        this.authMap.set(id, item);
+        storageManager.setData(this.authList.map(([_, item]) => item));
         this.setIsSaved(false);
+        this.alertService.notify('Item saved');
+        this.routerService.push('/home');
+    };
+
+    generateQR = () => {
+
+        // 'otpauth://totp/jesse+teammate@rollbar.com?secret=ITRRF5A3O3CY4EMF3PY7ZTJ4O4&issuer=Rollbar'
     };
 
     readItemListFromPlainArray = (data: any[]) => {
@@ -65,9 +88,9 @@ export class ListService {
             if (Array.isArray(data) && data.length) {
                 const temp: IAuthToken[] = [];
                 for (const item of data) {
-                    const { secret, issuer } = item || {};
-                    if (secret && issuer) {
-                        temp.push({ secret, issuer });
+                    const { secret, issuer, href } = item || {};
+                    if (secret && issuer && href) {
+                        temp.push({ secret, issuer, href });
                     } else {
                         throw new Error('invalid object');
                     }
@@ -77,7 +100,7 @@ export class ListService {
                 for (const item of temp) {
                     this.authMap.set(uuid(), item);
                 }
-                this.alertService.notify('Import complete');
+                this.alertService.notify('Import completed');
                 storageManager.setData(temp);
                 this.setIsSaved(true);
             } else {
@@ -87,18 +110,20 @@ export class ListService {
             this.alertService.notify('Invalid json object');
         }
     };
-
+    /**
+     * Скачиваем с сайта
+     */
     exportItemList = (fileName = '2fa-pwa.json') => {
         const blob = new Blob([storageManager.getContent()], { type: 'application/json;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.style.visibility="hidden";
+        a.style.visibility = "hidden";
         a.target = '_blank';
         [a.href, a.download] = [url, fileName];
         document.body.appendChild(a);
         a.addEventListener('click', () => {
             setTimeout(() => document.body.removeChild(a));
-            this.alertService.notify('Export complete');
+            this.alertService.notify('Export completed');
             this.setIsSaved(true);
         }, {
             once: true,
@@ -106,10 +131,12 @@ export class ListService {
         a.click();
         window.URL.revokeObjectURL(url);
     };
-
+    /**
+     * Загружаем на сайт
+     */
     imporItemList = () => {
         const input = document.createElement('input');
-        input.style.visibility="hidden";
+        input.style.visibility = "hidden";
         input.type = 'file';
         input.onchange = async ({ target }: any) => {
             try {

@@ -43,6 +43,8 @@ export const ListPage = () => {
   return (
     <Box>
       <Breadcrumbs
+        title='Accounts'
+        subtitle='List'
         disabled={ioc.listService.isSaved}
         actions={actions}
         onAction={handleAction}
