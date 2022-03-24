@@ -4,6 +4,8 @@
 
 ## GitHub pages deploy
 
+![screenshot](./screenshot.png)
+
 This app is available on [https://2fa-pwa.github.io/](https://2fa-pwa.github.io/)
 
 ## Usage

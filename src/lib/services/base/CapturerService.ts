@@ -21,7 +21,7 @@ export class CapturerService {
         autorun(() => {
             const state = this.videoService.state;
             const pathname = this.routerService.location?.pathname;
-            if (state === 'resolved' && pathname === '/scanner') {
+            if (state === 'resolved' && pathname === '/scanner' && !this.interval) {
                 const handler = async () => {
                     await this.processBlob()
                     this.interval = setTimeout(handler, CC_CAPTURE_INTERVAL);
@@ -34,6 +34,7 @@ export class CapturerService {
             const pathname = this.routerService.location?.pathname;
             if (state !== 'resolved' || pathname !== '/scanner') {
                 this.interval && clearInterval(this.interval);
+                this.interval = null;
             }
         }); 
     };
@@ -41,7 +42,6 @@ export class CapturerService {
     processBlob = async () => {
         console.log('capture')
         const { mediaStream } = this.videoService;
-        
         if(mediaStream) {
             const track = mediaStream.getVideoTracks()[0];
             const capturer = new ImageCapture(track);
@@ -53,6 +53,7 @@ export class CapturerService {
                 const issuer = url.searchParams.get("issuer")!;
                 if (secret) {
                     this.interval && clearTimeout(this.interval);
+                    this.interval = null;
                     this.listService.addAuthItem(secret, issuer ? issuer : prompt('Type token issuer') || 'Unknown issuer', result);
                     this.routerService.push('/home');
                     this.alertService.notify(`${issuer} added!`);

@@ -12,8 +12,11 @@ export class AlertService {
     alerts: IAlert[] = [];
 
     get current() {
-        const [alert = null] = this.alerts;
-        return alert;
+        if (this.alerts.length) {
+            return this.alerts[0];
+        } else {
+            return null;
+        }
     };
 
     constructor() {
@@ -30,10 +33,8 @@ export class AlertService {
         this.hideCurrent();
         this.alerts.push({
             key: randomString(),
-            message,
-            
+            message, 
         });
-        
     };
 
 };

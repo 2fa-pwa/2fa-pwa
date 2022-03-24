@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import ioc from '../../lib/ioc';
 import { observer } from 'mobx-react-lite';
