@@ -27,7 +27,7 @@ export const ScannerPage = () => {
                     )}
                 </AutoSizer>
             )}
-            <Fab 
+            {/*<Fab 
                 onClick={ioc.scannerPageService.toggleReverse}
                 color="primary" 
                 aria-label="add" 
@@ -39,7 +39,7 @@ export const ScannerPage = () => {
                 }}
             >
                 <CameraFrontIcon />
-            </Fab>
+            </Fab>*/}
         </>
     );
 };
