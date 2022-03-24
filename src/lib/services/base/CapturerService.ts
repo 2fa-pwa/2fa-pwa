@@ -33,7 +33,7 @@ export class CapturerService {
             const state = this.videoService.state;
             const pathname = this.routerService.location?.pathname;
             if (state !== 'resolved' || pathname !== '/scanner') {
-                this.interval && clearInterval(this.interval);
+                this.interval && clearTimeout(this.interval);
                 this.interval = null;
             }
         }); 
