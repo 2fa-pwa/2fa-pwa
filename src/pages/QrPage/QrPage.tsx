@@ -71,7 +71,7 @@ export const QrPage = ({
           handler={data}
           onChange={handleChange}
         />
-        <div>
+        <Box sx={{ display: 'flex' }}>
           {!!data && (
             <Box 
               sx={{
@@ -82,7 +82,7 @@ export const QrPage = ({
               <QRCode value={data.href}/>
             </Box>
           )}
-        </div>
+        </Box>
       </Stack>
     </>
   );
