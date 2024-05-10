@@ -71,16 +71,18 @@ export const QrPage = ({
           handler={data}
           onChange={handleChange}
         />
-        {!!data && (
-          <Box 
-            sx={{
-              padding: '15px',
-              background: 'white',
-            }}
-          >
-            <QRCode value={data.href}/>
-          </Box>
-        )}
+        <div>
+          {!!data && (
+            <Box 
+              sx={{
+                padding: '15px',
+                background: 'white',
+              }}
+            >
+              <QRCode value={data.href}/>
+            </Box>
+          )}
+        </div>
       </Stack>
     </>
   );
